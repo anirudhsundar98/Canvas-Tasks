@@ -1,0 +1,136 @@
+<!DOCTYPE HTML>
+<html>
+<title>Functions</title>
+
+<body>
+
+<center>
+
+<input type="text" id = "input" placeholder = "Enter JS Code Here" size="100"><br>
+<button onclick="draw()">Draw</button><br>
+
+<canvas id="canvas" height="500" width="500" style="border:1px solid black;">Your browser does not support the HTML5 Canvas Element</canvas>
+
+</center>
+
+<p id="1">_</p>
+<p id = "2">_1</p>
+
+</body>
+<script>
+var canvas = document.getElementById("canvas"),
+    ctx = canvas.getContext("2d"),
+	width = canvas.width,
+	height = canvas.height;
+	
+var	zoom = 50, 
+	axes = {
+		Xaxis_y : height/2,
+		Yaxis_x : width/2
+	},
+	point = {
+		x : 0,
+		y : 0,
+		width : 1,
+		height : 1
+	};
+	
+	drawAxes();
+	
+/*setInterval(function (){
+	document.getElementById("1").innerHTML = document.getElementById("input").value;
+}, 100); */
+
+document.body.addEventListener("keydown", function (e) {
+	document.getElementById("2").innerHTML = e.keyCode;
+	if(e.keyCode == 37) {
+		axes.Yaxis_x += 3;
+		draw();
+	}
+		
+	if(e.keyCode == 38) {
+		axes.Xaxis_y += 3;
+		draw();
+	}	
+	
+	if(e.keyCode == 39) {
+		axes.Yaxis_x -= 3;
+		draw();
+	}
+		
+	if (e.keyCode == 40) {
+		axes.Xaxis_y -= 3;
+		draw();
+	}
+	
+	if(e.keyCode == 107) {
+		zoom *= 2;
+		axes.Xaxis_y = (axes.Xaxis_y - height/2)*2 + height/2;
+		axes.Yaxis_x = (axes.Yaxis_x - width/2)*2 + width/2;
+		draw();
+	}
+	
+	if(e.keyCode == 109) {
+		zoom /= 2;
+		axes.Xaxis_y = (axes.Xaxis_y - height/2)/2 + height/2;
+		axes.Yaxis_x = (axes.Yaxis_x - width/2)/2 + width/2;
+		draw();
+	}
+});
+
+/*document.addEventListener("click", function(){
+    canvas.onmousedown
+})*/
+	
+	
+function draw() {
+	
+	ctx.clearRect(0, 0, 500, 500);
+	drawAxes();
+	
+	v = document.getElementById("input").value;
+	document.getElementById("1").innerHTML = v;
+	
+	var x, y, 
+	    next = 4,
+	    max = width,
+	    min = 0;
+	ctx.beginPath();
+	ctx.lineWidth = 1;
+
+	for (var i = min; i <= max; i++) {
+		xDraw = next*i;
+		x = (xDraw - axes.Yaxis_x) / zoom;
+		//y = zoom * Math.sin((xDraw - axes.Yaxis_x) / zoom)  -  axes.Xaxis_y;
+		y = zoom * eval(document.getElementById("input").value) - axes.Xaxis_y;
+
+		if (i == min) 
+			ctx.moveTo(point.x + xDraw, point.y - y);
+		else ctx.lineTo(point.x + xDraw, point.y - y);
+	}
+	ctx.stroke();
+	//requestAnimationFrame(draw);
+}
+
+function drawAxes() {
+	ctx.beginPath();
+	ctx.moveTo (0, axes.Xaxis_y);
+	ctx.lineTo (width, axes.Xaxis_y);	
+	ctx.moveTo (axes.Yaxis_x, 0);
+	ctx.lineTo (axes.Yaxis_x, height);
+	ctx.stroke();
+}
+ 
+function display() {	
+	var a = eval(v);
+	document.getElementById("2").innerHTML = a;
+}
+	
+	
+
+var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+
+</script>
+</html>
+	
+
